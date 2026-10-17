@@ -16,7 +16,10 @@ export const loginUser = TryCatch(async (req: Request, res: Response) => {
             return res.status(400).json({ message: "Authorization code is required" });
         }
 
-        const googleRes = await oauth2Client.getToken(code);
+        const googleRes = await oauth2Client.getToken({
+            code,
+            redirect_uri: "postmessage",
+        });
         oauth2Client.setCredentials(googleRes.tokens);
 
         const userRes = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${googleRes.tokens.access_token}`);
@@ -46,11 +49,16 @@ export const loginUser = TryCatch(async (req: Request, res: Response) => {
 
 export const myProfile = TryCatch(async (req: Authenticated, res: Response) => {
     try{
-        
-        const user = req.user;
-        if(!user) {
+        if(!req.user?._id) {
             return res.status(404).json({ message: 'User not found' });
-        } 
+        }
+
+        const user = await User.findById(req.user._id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).json({ user });
     }catch (error) {
         console.error("Error fetching user profile:", error);
         res.status(500).json({ message: "Internal server error" });

@@ -7,5 +7,6 @@ const routes = express.Router();
 routes.post("/login", loginUser);
 routes.put("/add/role", isAuth, addUserRole);
 routes.get("/profile", isAuth, myProfile);;
+routes.get("/user", isAuth, myProfile);
 
 export default routes;
