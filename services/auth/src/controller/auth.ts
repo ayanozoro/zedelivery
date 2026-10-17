@@ -3,9 +3,9 @@ import User from "../model/User.js";
 import jwt from "jsonwebtoken";
 import TryCatch from "../middelware/tryCatch.js";
 import type { Authenticated } from "../middelware/isAuth.js";
-import { google } from "googleapis";
 import dotenv from "dotenv";
 import axios from "axios";
+import { oauth2Client } from "../config/googleConfig.js";
 dotenv.config();
 
 export const loginUser = TryCatch(async (req: Request, res: Response) => {
@@ -17,7 +17,7 @@ export const loginUser = TryCatch(async (req: Request, res: Response) => {
         }
 
         const googleRes = await oauth2Client.getToken(code);
-        auth2Client.setCredentials(googleRes.tokens);
+        oauth2Client.setCredentials(googleRes.tokens);
 
         const userRes = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${googleRes.tokens.access_token}`);
         const { name, email, picture: image } = userRes.data;
