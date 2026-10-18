@@ -16,10 +16,6 @@ const ProtectedRoute = () => {
     if(user?.role == null && location.pathname !== "/select-role"){
         return <Navigate to="/select-role" state={{ from: location }} replace />;
     }
-    
-    if(user?.role !== null && location.pathname === "/select-role"){
-        return <Navigate to="/" state={{ from: location }} replace />;
-    }
 
     return <Outlet />;
 }

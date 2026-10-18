@@ -2,11 +2,13 @@ import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import {useGoogleLogin} from '@react-oauth/google';
+import { useApp } from '../context/useApp';
 
 const Login=()=>{
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
+    const { setUser, setIsAuth } = useApp();
 
     interface GoogleAuthResult {
         code: string;
@@ -22,10 +24,12 @@ const Login=()=>{
                 }
             );
             localStorage.setItem("token", res.data.token);
+            setUser(res.data.user);
+            setIsAuth(true);
             setLoading(false);
             navigate("/");
         }catch(error){
-            console.log(error);
+            console.error("Failed to sign in:", error);
             setErrorMessage("We couldn't sign you in. Please try again.");
             setLoading(false);
         }

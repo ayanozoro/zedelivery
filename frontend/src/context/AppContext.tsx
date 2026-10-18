@@ -38,6 +38,9 @@ export const AppProvider = ({ children }: AppContextProps) => {
             setIsAuth(true);
         } catch (error) {
             console.error("Failed to fetch user:", error);
+            localStorage.removeItem("token");
+            setUser(null);
+            setIsAuth(false);
         } finally {
             setLoading(false);
         }

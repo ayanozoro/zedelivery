@@ -1,5 +1,25 @@
 # React + TypeScript + Vite
 
+## Run locally
+
+Start the authentication service before signing in:
+
+```powershell
+cd ..\services\auth
+npm run build
+npm start
+```
+
+In a second terminal, start the frontend:
+
+```powershell
+cd frontend
+npm run dev
+```
+
+The frontend expects the authentication service at
+`http://localhost:5000`, configured by `VITE_AUTH_SERVER_URL`.
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:

@@ -55,7 +55,11 @@ export const addUserRole = TryCatch(async(req: Authenticated, res: Response, nex
         return res.status(401).json({ message: 'Unauthorized' });
     }
 
-    const user = await User.findByIdAndUpdate(req.user._id, { role }, { new: true});
+    const user = await User.findByIdAndUpdate(
+        req.user._id,
+        { role },
+        { returnDocument: "after" },
+    );
     if(!user) {
         return res.status(404).json({ message: 'User not found' });
     }
